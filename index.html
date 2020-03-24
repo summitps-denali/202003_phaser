@@ -7,68 +7,111 @@
 
 <script>
 /*  global Phaser  */
-var config = {
-  type: Phaser.AUTO,
-  width: 400,
-  height: 300,
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 200 }
+var SceneA = new Phaser.Class({
+
+    Extends: Phaser.Scene,
+
+    initialize:
+
+    function SceneA ()
+    {
+        Phaser.Scene.call(this, { key: 'sceneA' });
+    },
+
+    preload: function ()
+    {
+        this.load.image('face', 'bw-face.png');
+    },
+
+    create: function ()
+    {
+        this.add.sprite(400, 300, 'face').setAlpha(0.2);
+
+        this.input.once('pointerdown', function () {
+
+            console.log('From SceneA to SceneB');
+
+            this.scene.start('sceneB');
+
+        }, this);
     }
-  },
-  
-  scene: {
-    preload: preload,
-    create: create
-  }
+
+});
+
+var SceneB = new Phaser.Class({
+
+    Extends: Phaser.Scene,
+
+    initialize:
+
+    function SceneB ()
+    {
+        Phaser.Scene.call(this, { key: 'sceneB' });
+    },
+
+    preload: function ()
+    {
+        this.load.image('arrow', 'longarrow.png');
+    },
+
+    create: function ()
+    {
+        this.arrow = this.add.sprite(400, 300, 'arrow').setOrigin(0, 0.5);
+
+        this.input.once('pointerdown', function (event) {
+
+            console.log('From SceneB to SceneC');
+
+            this.scene.start('sceneC');
+
+        }, this);
+    },
+
+    update: function (time, delta)
+    {
+        this.arrow.rotation += 0.01;
+    }
+
+});
+
+var SceneC = new Phaser.Class({
+
+    Extends: Phaser.Scene,
+
+    initialize: function SceneC ()
+    {
+        Phaser.Scene.call(this, { key: 'sceneC' });
+    },
+
+    preload: function ()
+    {
+        this.load.image('mech', 'titan-mech.png');
+    },
+
+    create: function ()
+    {
+        this.add.sprite(Phaser.Math.Between(0, 800), 300, 'mech');
+
+        this.input.once('pointerdown', function (event) {
+
+            console.log('From SceneC to SceneA');
+
+            this.scene.start('sceneA');
+
+        }, this);
+    }
+
+});
+
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    backgroundColor: '#000000',
+    parent: 'phaser-example',
+    scene: [ SceneA, SceneB, SceneC ]
 };
 
 var game = new Phaser.Game(config);
-
-function preload() {
-  this.load.image('hillhouse',
-    'house_hill.png');
-  this.load.image('sales',
-    'pixdude salesman.png');
-  this.load.image('owner',
-    'pixlady facing.png');
-}
-
-function create() {
-  this.chatNode = 0;
-
-  this.add.image(200, 150,
-    'hillhouse');
-
-  this.owner = this.add.image(
-    297, 165, 'owner');
-  this.owner.visible = true;
-
-  this.salesman = this.add.image(
-    150, 250, 'sales');
-
-  this.textNeg = this.add.text(
-    140, 55, 'test'
-  );
-  this.textNeg.visible = true;
-
-  this.textPos = this.add.text(
-    240, 55, 'test'
-  );
-  this.textPos.visible = true;
-
-  this.textSales = this.add.text(
-    140, 150, 'test'
-  );
-  this.textSales.visible = true;
-
-//  this.salesman.animations.add("walk",
-//    [0, 0], 10, true);
-
-}
-
 </script>
 
-</body>
-</html>
