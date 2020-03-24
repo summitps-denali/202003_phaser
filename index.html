@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+</head>
+<body>
+
+<script>
+/*  global Phaser  */
+var config = {
+  type: Phaser.AUTO,
+  width: 400,
+  height: 300,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 200 }
+    }
+  },
+  
+  scene: {
+    preload: preload,
+    create: create
+  }
+};
+
+var game = new Phaser.Game(config);
+
+function preload() {
+  this.load.image('hillhouse',
+    'house_hill.png');
+  this.load.image('sales',
+    'pixdude salesman.png');
+  this.load.image('owner',
+    'pixlady facing.png');
+}
+
+function create() {
+  this.chatNode = 0;
+
+  this.add.image(200, 150,
+    'hillhouse');
+
+  this.owner = this.add.image(
+    297, 165, 'owner');
+  this.owner.visible = true;
+
+  this.salesman = this.add.image(
+    150, 250, 'sales');
+
+  this.textNeg = this.add.text(
+    140, 55, 'test'
+  );
+  this.textNeg.visible = true;
+
+  this.textPos = this.add.text(
+    240, 55, 'test'
+  );
+  this.textPos.visible = true;
+
+  this.textSales = this.add.text(
+    140, 150, 'test'
+  );
+  this.textSales.visible = true;
+
+//  this.salesman.animations.add("walk",
+//    [0, 0], 10, true);
+
+}
+
+</script>
+
+</body>
+</html>
