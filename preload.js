@@ -45,6 +45,9 @@ class preload extends Phaser.Scene{
 		this.load.spritesheet('tiles', 'assets/new/MWC tiles.png', {frameWidth: 32, frameHeight: 48});
 		this.load.spritesheet('buildings', 'assets/new/buildings.png', {frameWidth: 32, frameHeight: 48});
 		this.load.spritesheet('select', 'assets/new/select.png', {frameWidth: 32, frameHeight: 32});
+		this.load.spritesheet('endTurn', 'assets/new/endTurn.png', {frameWidth: 64, frameHeight: 32});
+		this.load.spritesheet('events', 'assets/new/events.png', {frameWidth: 100, frameHeight: 52});
+		this.load.spritesheet('resources', 'assets/new/resources.png', {frameWidth: 32, frameHeight: 32});
 
 	}
 	create() {
