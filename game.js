@@ -13,30 +13,41 @@ game_state.game.prototype = {
         game.load.image('choice_bn', 'assets/buttons/choice.png');
         game.load.image('choice_bn_hover', 'assets/buttons/choice_hover.png');
         game.load.image('choice_bn_click', 'assets/buttons/choice_click.png');
+        game.load.image('dark_hall', 'assets/BGs/dark_hall/dark_hall.png');
+        game.load.image('dark_hall_eyes', 'assets/BGs/dark_hall/dark_hall_eyes.png');
+        game.load.image('eye_room_1', 'assets/BGs/dark_hall/eye_room_1.png');
+        game.load.image('eye_room_2', 'assets/BGs/dark_hall/eye_room_2.png');
+        game.load.image('statue_room_1', 'assets/BGs/dark_hall/statue_room_1.png');
+        game.load.image('statue_room_2', 'assets/BGs/dark_hall/statue_room_2.png');
+        game.load.image('statue_room_3', 'assets/BGs/dark_hall/statue_room_3.png');
+        game.load.image('statue_room_3_intense', 'assets/BGs/dark_hall/statue_room_3_intense.png');
+        game.load.image('statue_room_4', 'assets/BGs/dark_hall/statue_room_4.png');
+        game.load.image('statue_room_4_intense', 'assets/BGs/dark_hall/statue_room_4_intense.png');
+        game.load.image('game_show', 'assets/BGs/game_show/game_show.png');
+        game.load.image('game_show_angry', 'assets/BGs/game_show/game_show_angry.png');
+        game.load.image('tom_robs_luigi', 'assets/BGs/tom_robs_luigi/tom_robs_luigi.png');
+        game.load.image('tom_robs_luigi_dead', 'assets/BGs/tom_robs_luigi/tom_robs_luigi_dead.png');
+        game.load.image('tom_robs_luigi_shot', 'assets/BGs/tom_robs_luigi/tom_robs_luigi_shot.png');
     },
 
     create: function() {
         
-        this.choice1 = new choice_btn(50, 450, 'choice_btn', function() {
-            
-        }, this);
-        this.choice2 = new choice_btn(230, 450, 'choice_btn', function() {
-            
-        }, this);
-        this.choice3 = new choice_btn(410, 450, 'choice_btn', function() {
-            
-        }, this);
-        this.choice4 = new choice_btn(590, 450, 'choice_btn', function() {
-            
-        }, this);
+        this.bg = game.add.sprite(400,300,"");
+        this.bg.anchor.setTo(0.5,0.5);
+        
+        this.choice1 = new choice_btn(50, 450, 'choice_btn', function() {}, this);
+        this.choice2 = new choice_btn(230, 450, 'choice_btn', function() {}, this);
+        this.choice3 = new choice_btn(410, 450, 'choice_btn', function() {}, this);
+        this.choice4 = new choice_btn(590, 450, 'choice_btn', function() {}, this);
         
         this.mainText = game.add.text(200, 100, '', {
             font: '16px Arial',
-            fill: '#FFF',
+            fill: '#EB9834',
             wordWrap: true,
             wordWrapWidth: 400,
             align: 'center'
         });
+        this.mainText.setShadow(0, 0, '#000', 2);
         this.enterRoom('hall');
     },
 
@@ -49,6 +60,7 @@ game_state.game.prototype = {
         if (scene == "dark_hall") {
             if (newRoom == "hall") {
                 this.mainText.setText("You are in a Dark Hall. It is dark. The hall is dark. You want out.");
+                this.bg.loadTexture(counter2 == 0 ? "dark_hall" : "dark_hall_eyes");
                 
                 this.choice1.setText("Yes.");
                 this.choice1.setEvent(function() {
@@ -92,12 +104,14 @@ game_state.game.prototype = {
             }
             else if (newRoom == "statue_room") {
                 if (counter2 == 0) {
-                    this.mainText.setText("You enter the left room. There's a stone statue of a fat man. You don't like it.");
+                    this.mainText.setText("You enter the left room. There's a stone statue of an owl. You don't like it.");
                     counter3 = counter3 == 2 ? 2 : 1;
+                    this.bg.loadTexture("statue_room_1");
                     
                     this.choice1.setText("Scream");
                     this.choice1.setEvent(function() {
                         this.mainText.setText("You SCREAM at the statue. It SCREAMS back. You are all screaming.");
+                    this.bg.loadTexture("statue_room_2");
                         counter3 = 2;
                     });
                     
@@ -121,18 +135,25 @@ game_state.game.prototype = {
                     counter1 = 0;
                     if (counter3 == 0) {
                         this.mainText.setText("You enter the left room. There's a stone statue of an eye. You don't like it.");
+                        this.bg.loadTexture("statue_room_3");
                     }
                     else if (counter3 == 1) {
                         this.mainText.setText("You come back to the room with the statue. It is now an eye.");
+                        this.bg.loadTexture("statue_room_3");
                     }
                     else {
                         this.mainText.setText("You come back to the room with the statue. The statue is an angry eye.");
+                        this.bg.loadTexture("statue_room_4");
                     }
                     this.choice1.setText("Scream");
                     this.choice1.setEvent(function() {
                         this.mainText.setText("You can't scream.");
                         counter1++;
-                        if (counter1 >= 20) {
+                        if (counter1 == 19) {
+                            this.bg.loadTexture(counter3 == 2 ? "statue_room_4_intense" : "statue_room_3_intense");
+                            this.disableAllButtons(1000);
+                        }
+                        else if (counter1 >= 20) {
                             counter1 = 0;
                             counter2 = 0;
                             counter3 = 0;
@@ -146,6 +167,10 @@ game_state.game.prototype = {
                     this.choice2.setEvent(function() {
                         this.mainText.setText("You can't flail.");
                         counter1++;
+                        if (counter1 == 19) {
+                            this.bg.loadTexture(counter3 == 2 ? "statue_room_4_intense" : "statue_room_3_intense");
+                            this.disableAllButtons(1000);
+                        }
                         if (counter1 >= 20) {
                             counter1 = 0;
                             counter2 = 0;
@@ -160,6 +185,10 @@ game_state.game.prototype = {
                     this.choice3.setEvent(function() {
                         this.mainText.setText(". . .");
                         counter1++;
+                        if (counter1 == 19) {
+                            this.bg.loadTexture(counter3 == 2 ? "statue_room_4_intense" : "statue_room_3_intense");
+                            this.disableAllButtons(1000);
+                        }
                         if (counter1 >= 20) {
                             counter1 = 0;
                             counter2 = 0;
@@ -173,6 +202,10 @@ game_state.game.prototype = {
                     this.choice4.setEvent(function() {
                         this.mainText.setText("You can't leave.");
                         counter1++;
+                        if (counter1 == 19) {
+                            this.bg.loadTexture(counter3 == 2 ? "statue_room_4_intense" : "statue_room_3_intense");
+                            this.disableAllButtons(1000);
+                        }
                         if (counter1 >= 20) {
                             counter1 = 0;
                             counter2 = 0;
@@ -186,11 +219,13 @@ game_state.game.prototype = {
             else if (newRoom == "eye_room") {
                 this.mainText.setText("You drag yourself into the right room. It is right afterall. It's empty. You walk to the end. It's still empty. You feel watched.");
                 this.disableAllButtons(1000);
+                this.bg.loadTexture("eye_room_1");
                 
                 this.choice1.setText("TURN AROUND");
                 this.choice1.setEvent(function() {
                     this.disableAllButtons(1000);
                     this.mainText.setText("You turn around. The room is made of eyes. They are all watching you. It's time to LEAVE.");
+                    this.bg.loadTexture("eye_room_2");
                     counter2 = 1;
                     this.choice1.setText("Leave");
                     this.choice1.setEvent(function() {
@@ -218,6 +253,7 @@ game_state.game.prototype = {
                 this.choice2.setEvent(function() {
                     this.disableAllButtons(1000);
                     this.mainText.setText("You turn around. The room is made of eyes. They are all watching you. It's time to LEAVE.");
+                    this.bg.loadTexture("eye_room_2");
                     counter2 = 1;
                     this.choice1.setText("Leave");
                     this.choice1.setEvent(function() {
@@ -245,6 +281,7 @@ game_state.game.prototype = {
                 this.choice3.setEvent(function() {
                     this.disableAllButtons(1000);
                     this.mainText.setText("You turn around. The room is made of eyes. They are all watching you. It's time to LEAVE.");
+                    this.bg.loadTexture("eye_room_2");
                     counter2 = 1;
                     this.choice1.setText("Leave");
                     this.choice1.setEvent(function() {
@@ -272,6 +309,7 @@ game_state.game.prototype = {
                 this.choice4.setEvent(function() {
                     this.disableAllButtons(1000);
                     this.mainText.setText("You turn around. The room is made of eyes. They are all watching you. It's time to LEAVE.");
+                    this.bg.loadTexture("eye_room_2");
                     counter2 = 1;
                     this.choice1.setText("Leave");
                     this.choice1.setEvent(function() {
@@ -298,6 +336,7 @@ game_state.game.prototype = {
         }
         else if (scene == "game_show1") {
             if (newRoom == "q0") {
+                this.bg.loadTexture("game_show");
                 this.mainText.setText("Welcome to the MILLIONAIRS game show!!! You'll answer 10 questions. Get them all right and earn ONE MILLION DOLLARS!!! Are you ready!?");
                 
                 this.choice1.setText("Hell yeah!");
@@ -397,7 +436,7 @@ game_state.game.prototype = {
                     this.choice4.setText("Who are you");
                     this.choice4.setEvent(function() {
                         this.disableAllButtons(2000);
-                        this.mainText.setText("Umm... I'm you? Hup hup, let's go!");
+                        this.mainText.setText("Umm... I'm $%*@# ? Hup hup, let's go!");
                         counter1++;
                         setTimeout(function() {
                             self.enterRoom("q1");
@@ -429,11 +468,11 @@ game_state.game.prototype = {
                 else if (counter1 == 5) {
                     this.choice4.setText("Answer me");
                     this.choice4.setEvent(function() {
-                        this.disableAllButtons(3000);
+                        this.disableAllButtons(12000);
                         this.mainText.setText("I WILL SUFFER YOU NO LONGER!");
-                        //UNFINISHED - add spook.
+                        this.bg.loadTexture("game_show_angry");
                         setTimeout(function() {
-                            scene = "tom_robs_isabelle";
+                            scene = "tom_robs_luigi";
                             self.enterRoom("start");
                         }, 4000);
                     });
@@ -814,7 +853,7 @@ game_state.game.prototype = {
                             setTimeout(function() {
                                 self.mainText.setText("1");
                                 setTimeout(function() {
-                                    scene = "tom_robs_isabelle";
+                                    scene = "tom_robs_luigi";
                                     self.enterRoom("start");
                                 }, 1000);
                             }, 1000);
@@ -843,8 +882,9 @@ game_state.game.prototype = {
                 });
             }
         }
-        else if (scene == "tom_robs_isabelle") {
+        else if (scene == "tom_robs_luigi") {
             if (newRoom == "start") {
+                this.bg.loadTexture("tom_robs_luigi");
                 this.disableAllButtons(7000);
                 counter1 = 0; // enemy hp
                 counter2 = 0; // your hp
@@ -853,11 +893,11 @@ game_state.game.prototype = {
                 var did_dodge = false;
                 this.mainText.setText("Tom Nook: I'm robbing you because you didn't pay your taxes");
                 setTimeout(function() {
-                    self.mainText.setText("Isabelle: Oh no.");
+                    self.mainText.setText("Luigi: Oh no.");
                     setTimeout(function() {
                         self.mainText.setText("Tom Nook: Give me your bells.");
                         setTimeout(function() {
-                            self.mainText.setText("Isabelle: Help me.");
+                            self.mainText.setText("Luigi: Help me.");
                             counter1 = 25;
                             counter2 = 10;
                             
@@ -912,14 +952,14 @@ game_state.game.prototype = {
                                     self.disableAllButtons(3000);
                                     if (counter3 == 1) {
                                         clearInterval(tom_nook);
-                                        setInterval(function() {
+                                        setTimeout(function() {
                                             clearInterval(fight);
                                             self.enterRoom("end_gun");
                                         }, 3000);
                                     }
                                     else {
                                         clearInterval(tom_nook);
-                                        setInterval(function() {
+                                        setTimeout(function() {
                                             clearInterval(fight);
                                             self.enterRoom("end");
                                         }, 3000);
@@ -929,6 +969,8 @@ game_state.game.prototype = {
                                     self.mainText.setText("You almost died! But you shot him.");
                                     counter1 = 0;
                                     counter3 = 1;
+                                    clearInterval(fight);
+                                    self.enterRoom("end");
                                 }
                             }, 20);
                         }, 2000);
@@ -936,49 +978,67 @@ game_state.game.prototype = {
                 }, 2000); 
             }
             else if (newRoom == "end") {
-                this.mainText.setText(counter3 == 1 ? "Isabelle: YOU SHOT HIM!!!" : "Isabelle: Thank you, he went crazy!");
+                this.mainText.setText(counter3 == 1 ? "Luigi: YOU SHOT HIM!!!" : "Luigi: Thank you, he went crazy!");
+                this.bg.loadTexture(counter3 == 1 ? "tom_robs_luigi_shot" : "tom_robs_luigi_dead");
                 
                 this.choice1.setText("GG");
                 this.choice1.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
                 
                 this.choice2.setText("GG");
                 this.choice2.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
                 
                 this.choice3.setText("GG");
                 this.choice3.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
                 
                 this.choice4.setText("GG");
                 this.choice4.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
             }
             else if (newRoom == "end_gun") {
-                this.mainText.setText("yikes");
+                this.mainText.setText("Luigi: YOU SHOT HIM!!!");
+                this.bg.loadTexture("tom_robs_luigi_shot");
                 
-                this.choice1.setText("GG");
+                this.choice1.setText("OOF");
                 this.choice1.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
                 
-                this.choice2.setText("GG");
+                this.choice2.setText("OOF");
                 this.choice2.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
                 
-                this.choice3.setText("GG");
+                this.choice3.setText("OOF");
                 this.choice3.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
                 
-                this.choice4.setText("GG");
+                this.choice4.setText("OOF");
                 this.choice4.setEvent(function() {
-                    this.mainText.setText("");
+                    this.mainText.setText("You wake up, those were some pretty odd dreams u had... Oh well. The end");
+                    this.bg.kill();
+                    this.disableAllButtons();
                 });
             }
         }

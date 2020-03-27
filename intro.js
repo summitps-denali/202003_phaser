@@ -16,10 +16,12 @@ game_state.intro.prototype = {
         game.load.image('choice_btn', 'assets/buttons/choice.png');
         game.load.image('choice_btn_hover', 'assets/buttons/choice_hover.png');
         game.load.image('choice_btn_click', 'assets/buttons/choice_click.png');
+        game.load.image('bg', 'assets/BGs/title.png');
     },
 
     create: function() {
         game.stage.backgroundColor = "#333";
+        game.add.sprite(0,0,'bg');
         
         var start = game.add.sprite(320, 450, 'choice_btn');
         start.inputEnabled = true;
