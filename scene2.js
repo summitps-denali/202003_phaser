@@ -221,6 +221,30 @@ class scene2 extends Phaser.Scene {
                                 buildings.getFirstNth(this.name, true).setFrame(0); // die
                                 buildings.getFirstNth(this.name, true).hp = null; //delete old hp
                                 buildings.getFirstNth(this.name, true).allegiance = "null"; //delete old hp
+                                if (buildings.getFirstNth(this.name, true).type = "capital") {
+                                    //end the game
+                                    endGameSplash.setVisible(true);
+                                    eventBG.setVisible(true)
+                                    if (food < 0){
+                                        reputation += food;
+                                    }
+                                    if (gold < 0) {
+                                        reputation += gold;
+                                    }
+                                    if (population < 0) {
+                                        reputation += population;
+                                    }
+                                    if (reputation > 100){
+                                        endGameSplash.setFrame(1);
+                                        endingText.setText("PHILOSOPHER KING").setVisible(true);
+                                        endingText2.setText("Your rule will be immortalized into legend.").setVisible(true);
+                                    }
+                                    else {
+                                        endGameSplash.setFrame(2);
+                                        endingText.setText("TYRANT").setVisible(true);
+                                        endingText.setText("Your brutality will never be forgotten.").setVisible(true);
+                                    }
+                                }
                             }
                             units.getFirstNth(selectedUnit, true).turnTaken = true; //exhaust unit
                             for (var i = 0; i < 229; i++) { //reset all tiles
@@ -234,6 +258,19 @@ class scene2 extends Phaser.Scene {
                 }
                 else { //left click
                     if (buildings.getFirstNth(this.name, true).type == "barracks") { //if clicking on a barracks, set purchasing to buy mode
+                        purchasing = "buying"
+                        for (var i = 0; i < 229; i++) { //reset all tile selections
+                            select.getFirstNth(i, true).selected = false;
+                            select.getFirstNth(i, true).highlighted = false;
+                            select.getFirstNth(i, true).setFrame(0);
+                            units.getFirstNth(i, true).clearTint();
+                            units.getFirstNth(i, true).selected = false;
+                            buildings.getFirstNth(i, true).clearTint();
+                            buildings.getFirstNth(i, true).selected = false;
+                        }
+                        this.selected = true; //then select the barracks
+                    }
+                    if (buildings.getFirstNth(this.name, true).type == "capital") { //if clicking on a barracks, set purchasing to buy mode
                         purchasing = "buying"
                         for (var i = 0; i < 229; i++) { //reset all tile selections
                             select.getFirstNth(i, true).selected = false;
@@ -318,12 +355,8 @@ class scene2 extends Phaser.Scene {
                     }
                 }
             });
-        } //all 
+        } //all
 
-        resourcesIcon = this.add.image(50, 700, 'resources').setScale(2, 2); //food
-        resourcesText = this.add.text(100, 690, '100', { fontSize: '24px', fontFamily: 'courier' }); //food
-        resourcesIcon = this.add.image(200, 700, 'resources').setScale(2, 2).setFrame(1); //gold
-        resourcesText2 = this.add.text(250, 690, '100', { fontSize: '24px', fontFamily: 'courier' }); //gold
         soldierText = this.add.text(400, 660, 'soldier (10 food)', { fontSize: '14px', fontFamily: 'courier' }); //gold
         archerText = this.add.text(400, 680, 'archer (20 food)', { fontSize: '14px', fontFamily: 'courier' }); //gold
         knightText = this.add.text(400, 700, 'knight (40 food)', { fontSize: '14px', fontFamily: 'courier' }); //gold
@@ -359,18 +392,108 @@ class scene2 extends Phaser.Scene {
             //purchasing = "crusader";
         });
 
-
         endButton = this.add.image(750, 700, 'endTurn').setScale(4, 4).setInteractive().on('pointerdown', function(pointer) {
             endButton.setFrame(2);
+
+
+            var rng = Phaser.Math.Between(0, 9);
+            if (rng > 7) { //do event
+                endButton.disableInteractive();
+                eventBG.setVisible(true);
+                eventSplash.setVisible(true);
+                eventText.setVisible(true);
+                eventOption1.setVisible(true);
+                eventOption2.setVisible(true);
+                eventOption3.setVisible(true);
+                eventOption4.setVisible(true);
+                if (eventNum == 0) {
+                    eventText.setText(pandemicText[0]);
+                    eventOption1.setText(pandemicText[1]);
+                    eventOption2.setText(pandemicText[2]);
+                    eventOption3.setText(pandemicText[3]);
+                    eventOption4.setText(pandemicText[4]);
+                }
+                else if (eventNum == 1) {
+                    eventSplash.setFrame(1);
+                    eventText.setText(innovationText[0]);
+                    eventOption1.setText(innovationText[1]);
+                    eventOption2.setText(innovationText[2]);
+                    eventOption3.setText(innovationText[3]);
+                    eventOption4.setText(innovationText[4]);
+                }
+                else if (eventNum == 2) {
+                    eventSplash.setFrame(2);
+                    eventText.setText(mercenaryText[0]);
+                    eventOption1.setText(mercenaryText[1]);
+                    eventOption2.setText(mercenaryText[2]);
+                    eventOption3.setText(mercenaryText[3]);
+                    eventOption4.setText(mercenaryText[4]);
+                }
+                else if (eventNum == 3) {
+                    eventSplash.setFrame(3);
+                    eventText.setText(ablazeText[0]);
+                    eventOption1.setText(ablazeText[1]);
+                    eventOption2.setText(ablazeText[2]);
+                    eventOption3.setText(ablazeText[3]);
+                    eventOption4.setText(ablazeText[4]);
+                }
+                else if (eventNum == 4) {
+                    eventSplash.setFrame(4);
+                    eventText.setText(riotText[0]);
+                    eventOption1.setText(riotText[1]);
+                    eventOption2.setText(riotText[2]);
+                    eventOption3.setText(riotText[3]);
+                    eventOption4.setText(riotText[4]);
+                }
+                else if (eventNum == 5) {
+                    eventSplash.setFrame(5);
+                    eventText.setText(starvationText[0]);
+                    eventOption1.setText(starvationText[1]);
+                    eventOption2.setText(starvationText[2]);
+                    eventOption3.setText(starvationText[3]);
+                    eventOption4.setText(starvationText[4]);
+                }
+                else if (eventNum == 6) {
+                    eventSplash.setFrame(6);
+                    eventText.setText(recruitsText[0]);
+                    eventOption1.setText(recruitsText[1]);
+                    eventOption2.setText(recruitsText[2]);
+                    eventOption3.setText(recruitsText[3]);
+                    eventOption4.setText(recruitsText[4]);
+                }
+                else if (eventNum == 7) {
+                    eventSplash.setFrame(7);
+                    eventText.setText(surrenderText[0]);
+                    eventOption1.setText(surrenderText[1]);
+                    eventOption2.setText(surrenderText[2]);
+                    eventOption3.setText(surrenderText[3]);
+                    eventOption4.setText(surrenderText[4]);
+                }
+                else {
+
+                    eventBG.setVisible(false);
+                    eventSplash.setVisible(false);
+                    eventText.setVisible(false);
+                    eventOption1.setVisible(false);
+                    eventOption2.setVisible(false);
+                    eventOption3.setVisible(false);
+                    eventOption4.setVisible(false);
+                    endButton.setInteractive();
+
+                }
+
+            }
             for (var i = 0; i < 229; i++) {
                 units.getFirstNth(i, true).turnTaken = false; //reset turn exhaustion
                 buildings.getFirstNth(i, true).turnTaken = false; //reset turn exhaustion
                 if (buildings.getFirstNth(i, true).type == "town") {
-                    food += 10;
+                    food += 5;
+                    population += 1;
                 }
             }
 
-            gold += 10;
+            gold += 5;
+            reputation += 1;
         });
         endButton.on('pointerover', function(pointer) {
             endButton.setFrame(1)
@@ -378,22 +501,256 @@ class scene2 extends Phaser.Scene {
         endButton.on('pointerout', function(pointer) {
             endButton.setFrame(0)
         });
-        spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        spacebar.on('down', function(event) {
-            for (var i = 0; i < 229; i++) {
-                units.getFirstNth(i, true).turnTaken = false; //reset turn exhaustion
-                buildings.getFirstNth(i, true).turnTaken = false; //reset turn exhaustion
-                if (buildings.getFirstNth(i, true).type == "town") {
-                    food += 10;
-                }
-            }
-            gold += 10;
-        });
+
         healthText = this.add.text(550, 680, 'HP', { fontSize: '24px', fontFamily: 'courier' });
 
-        //eventBG = this.add.image(0, 0, 'box').setOrigin(0, 0).setScale(1500, 750);
-        //eventSplash = this.add.image(750, 0, 'events').setFrame(0).setScale(8, 8).setOrigin(0.5, 0);
+        eventBG = this.add.image(0, 0, 'box').setOrigin(0, 0).setScale(1500, 750).setVisible(false);
+        eventSplash = this.add.image(750, 0, 'events').setFrame(0).setScale(8, 8).setOrigin(0.5, 0).setVisible(false);
+        eventText = this.add.text(750, 450, pandemicText[0], { fontSize: '24px', fontFamily: 'courier' }).setOrigin(0.5, 0).setVisible(false);
+        eventConfirm = this.add.text(750, 540, "confirm", { fontSize: '24px', fontFamily: 'courier' }).setOrigin(0.5, 0.5).setInteractive().on('pointerdown', function(pointer) {
+            eventBG.setVisible(false);
+            eventSplash.setVisible(false);
+            eventText.setVisible(false);
+            eventConfirm.setVisible(false);
+            endButton.setInteractive();
 
+            eventNum += 1; //next event set
+        }).setVisible(false);
+        eventOption1 = this.add.text(750, 540, pandemicText[1], { fontSize: '24px', fontFamily: 'courier' }).setOrigin(0.5, 0.5).setInteractive().on('pointerdown', function(pointer) {
+            eventOption1.setVisible(false);
+            eventOption2.setVisible(false);
+            eventOption3.setVisible(false);
+            eventOption4.setVisible(false);
+            eventConfirm.setVisible(true);
+
+            if (eventNum == 0) { //quarantine
+                eventText.setText(pandemicResponse[0]);
+                food -= 30;
+                population -= 20;
+            }
+            else if (eventNum == 1) { //weaponize
+                eventText.setText(innovationResponse[0]);
+                units.getFirstNth(1, true).setFrame(8).flipX = true; //your unit
+                units.getFirstNth(1, true).allegiance = "allied";
+                units.getFirstNth(1, true).turnTaken = false;
+                units.getFirstNth(1, true).type = "crusader";
+                units.getFirstNth(1, true).hp = 5;
+                reputation += 5;
+            }
+            else if (eventNum == 2) { //disperse
+                eventText.setText(mercenaryResponse[0]);
+                reputation += 5;
+            }
+            else if (eventNum == 3) { //give raiders food
+                eventText.setText(ablazeResponse[0]);
+                food = (food / 2) - 10;
+                reputation -= 20;
+            }
+            else if (eventNum == 4) { //enact martial law
+                eventText.setText(riotResponse[0]);
+                reputation = reputation / 2;
+            }
+            else if (eventNum == 5) { //cut down on rations
+                eventText.setText(starvationResponse[0]);
+                reputation -= 5;
+                food += 10;
+            }
+            else if (eventNum == 6) { //accept younger soldiers
+
+                eventText.setText(recruitsResponse[0]);
+                units.getFirstNth(2, true).setFrame(2).flipX = true; //your unit
+                units.getFirstNth(2, true).allegiance = "allied";
+                units.getFirstNth(2, true).turnTaken = false;
+                units.getFirstNth(2, true).type = "soldier";
+                units.getFirstNth(2, true).hp = 2;
+                units.getFirstNth(3, true).setFrame(4).flipX = true; //your unit
+                units.getFirstNth(3, true).allegiance = "allied";
+                units.getFirstNth(3, true).turnTaken = false;
+                units.getFirstNth(3, true).type = "archer";
+                units.getFirstNth(3, true).hp = 2;
+            }
+            else if (eventNum == 7) { //
+                eventText.setText(surrenderResponse[0]);
+                reputation -= 10;
+                gold += 30;
+            }
+        }).setVisible(false);
+        eventOption2 = this.add.text(750, 570, pandemicText[2], { fontSize: '24px', fontFamily: 'courier' }).setOrigin(0.5, 0.5).setInteractive().on('pointerdown', function(pointer) {
+            eventOption1.setVisible(false);
+            eventOption2.setVisible(false);
+            eventOption3.setVisible(false);
+            eventOption4.setVisible(false);
+            eventConfirm.setVisible(true);
+            if (eventNum == 0) {
+                eventText.setText(pandemicResponse[1]); //kill
+                reputation -= 40;
+                population -= 20;
+            }
+            else if (eventNum == 1) { //manufacturing
+                eventText.setText(innovationResponse[1]);
+                gold += 40;
+                food += 20;
+            }
+            else if (eventNum == 2) { //hire them as soldiers
+                eventText.setText(mercenaryResponse[1]);
+                gold -= 20;
+                units.getFirstNth(49, true).setFrame(6).flipX = true; //your unit
+                units.getFirstNth(49, true).allegiance = "allied";
+                units.getFirstNth(49, true).turnTaken = false;
+                units.getFirstNth(49, true).type = "knight";
+                units.getFirstNth(49, true).hp = 3;
+
+            }
+            else if (eventNum == 3) { //give them gold
+                eventText.setText(ablazeResponse[1]);
+                gold = (gold / 2) - 10;
+                reputation -= 20;
+            }
+            else if (eventNum == 4) { //suppress info
+                eventText.setText(riotResponse[1]);
+                gold -= 20;
+                reputation -= 1;
+            }
+            else if (eventNum == 5) { //fight on
+                eventText.setText(starvationResponse[1]);
+                reputation -= 5;
+                population -= 20;
+                food -= 10;
+            }
+            else if (eventNum == 6) { //propaganda
+                eventText.setText(recruitsResponse[1]);
+                reputation += 15;
+            }
+            else if (eventNum == 7) { //mercy
+                eventText.setText(surrenderResponse[1]);
+                reputation += 20;
+                food += 10;
+                gold += 10;
+            }
+        }).setVisible(false);
+        eventOption3 = this.add.text(750, 600, pandemicText[3], { fontSize: '24px', fontFamily: 'courier' }).setOrigin(0.5, 0.5).setInteractive().on('pointerdown', function(pointer) {
+            eventOption1.setVisible(false);
+            eventOption2.setVisible(false);
+            eventOption3.setVisible(false);
+            eventOption4.setVisible(false);
+            eventConfirm.setVisible(true);
+            if (eventNum == 0) {
+                eventText.setText(pandemicResponse[2]); //quarantine everybody
+                food -= 30;
+                gold -= 30;
+                population -= 5;
+            }
+            else if (eventNum == 1) { //propaganda
+                eventText.setText(innovationResponse[2]);
+                reputation += 20;
+            }
+            else if (eventNum == 2) { //party with them
+                eventText.setText(mercenaryResponse[2]);
+                gold -= 20;
+                food -= 10;
+                reputation += 10;
+            }
+            else if (eventNum == 3) { //give them PEOPLE
+                eventText.setText(ablazeResponse[2]);
+                population = population / 2;
+                reputation -= 60;
+            }
+            else if (eventNum == 4) { //public forums
+                eventText.setText(riotResponse[2]);
+                reputation += 15;
+                gold -= 20;
+                food -= 20;
+            }
+            else if (eventNum == 5) { //pillage
+                eventText.setText(starvationResponse[2]);
+                reputation -= 40;
+                food += 50;
+            }
+            else if (eventNum == 6) { //manual labor
+                eventText.setText(recruitsResponse[2]);
+                reputation += 5;
+                gold += 10;
+                population += 10;
+            }
+            else if (eventNum == 7) { //recruit
+                eventText.setText(surrenderResponse[2]);
+                reputation += 5;
+                food -= 10;
+                gold -= 10;
+                units.getFirstNth(50, true).setFrame(6).flipX = true; //your unit
+                units.getFirstNth(50, true).allegiance = "allied";
+                units.getFirstNth(50, true).turnTaken = false;
+                units.getFirstNth(50, true).type = "knight";
+                units.getFirstNth(50, true).hp = 3;
+
+            }
+        }).setVisible(false);
+        eventOption4 = this.add.text(750, 630, pandemicText[4], { fontSize: '24px', fontFamily: 'courier' }).setOrigin(0.5, 0.5).setInteractive().on('pointerdown', function(pointer) {
+            eventOption1.setVisible(false);
+            eventOption2.setVisible(false);
+            eventOption3.setVisible(false);
+            eventOption4.setVisible(false);
+            eventConfirm.setVisible(true);
+            if (eventNum == 0) {
+                eventText.setText(pandemicResponse[3]); //do nothing
+
+                reputation -= 40;
+                population -= 40;
+                food -= 20;
+                gold -= 20;
+            }
+            else if (eventNum == 1) { //destroy it ! 
+                eventText.setText(innovationResponse[3]);
+                gold += 20;
+                population += 15;
+            }
+            else if (eventNum == 2) { //hire them to help around
+                eventText.setText(mercenaryResponse[3]);
+                reputation += 5;
+                population += 5;
+                gold -= 20;
+                food += 15;
+            }
+            else if (eventNum == 3) { //fIGHT
+                eventText.setText(ablazeResponse[3]);
+                reputation += 10;
+                population -= 30;
+            }
+            else if (eventNum == 4) { //quell riot with force
+                eventText.setText(riotResponse[3]);
+                reputation -= 50;
+                population -= 30;
+            }
+            else if (eventNum == 5) { //forage
+                eventText.setText(starvationResponse[3])
+                food += 30;
+                gold -= 30;
+            }
+            else if (eventNum == 6) { //manual labor
+                eventText.setText(recruitsResponse[3]);
+                reputation += 15;
+                population += 20;
+            }
+            else if (eventNum == 7) { //imprison
+                eventText.setText(surrenderResponse[3]);
+                reputation += 5;
+                food -= 10;
+                gold -= 10;
+            }
+        }).setVisible(false);
+
+        resourcesIcon = this.add.image(50, 700, 'resources').setScale(2, 2); //food
+        resourcesText = this.add.text(100, 690, '100', { fontSize: '24px', fontFamily: 'courier' }); //food
+        resourcesIcon = this.add.image(200, 700, 'resources').setScale(2, 2).setFrame(1); //gold
+        resourcesText2 = this.add.text(250, 690, '100', { fontSize: '24px', fontFamily: 'courier' }); //gold
+        resourcesIcon = this.add.image(1150, 700, 'resources').setScale(2, 2).setFrame(2); //pop
+        resourcesText3 = this.add.text(1200, 690, '100', { fontSize: '24px', fontFamily: 'courier' }); //gold
+        resourcesIcon = this.add.image(1300, 700, 'resources').setScale(2, 2).setFrame(3); //rep
+        resourcesText4 = this.add.text(1350, 690, '100', { fontSize: '24px', fontFamily: 'courier' }); //gold
+        endGameSplash = this.add.image(750, 0, 'ending').setScale(12, 12).setFrame(1).setOrigin(0.5, 0).setVisible(false); //ending loss by default
+        
+        endingText = this.add.text(750, 625, 'TYRANT', { fontSize: '64px', fontFamily: 'courier' }).setOrigin(0.5, 0.5).setVisible(false);
+        endingText2 = this.add.text(750, 680, 'Your brutality will live on in infamy.', { fontSize: '24px', fontFamily: 'courier' }).setOrigin(0.5, 0.5).setVisible(false);
     } //end
 
     update() {
@@ -410,6 +767,8 @@ class scene2 extends Phaser.Scene {
         garrisonText.setVisible(false);
         resourcesText.setText(food);
         resourcesText2.setText(gold);
+        resourcesText3.setText(population);
+        resourcesText4.setText(reputation);
         for (var i = 0; i < 229; i++) { //for every tile
 
             if (select.getFirstNth(i, true).selected == true) { //check if selected
@@ -617,8 +976,7 @@ class scene2 extends Phaser.Scene {
                             townText.setVisible(true); //options
                             barracksText.setVisible(true);
                             garrisonText.setVisible(true);
-                            for (var i = 0; i < 229; i++) {
-                            }
+                            for (var i = 0; i < 229; i++) {}
 
                         }
                         else if (buildings.getFirstNth(i, true).type == "barracks") {
