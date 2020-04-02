@@ -109,7 +109,7 @@ class scene2 extends Phaser.Scene {
             x: 62,
             y: 60
         }); //order units
-        debugText = this.add.text(400, 500, 'n/a', { fontSize: '14px', fontFamily: 'courier' }); //town
+        //debugText = this.add.text(400, 500, 'n/a', { fontSize: '14px', fontFamily: 'courier' }); //town
         for (var i = 0; i < 229; i++) { //crate every selectable tile
             select.getFirstNth(i, true).setInteractive(); //make them clickable
             //unit.getFirstNth(i, true).id = i;//assign unit tiles ids
@@ -242,7 +242,7 @@ class scene2 extends Phaser.Scene {
                                     else {
                                         endGameSplash.setFrame(2);
                                         endingText.setText("TYRANT").setVisible(true);
-                                        endingText.setText("Your brutality will never be forgotten.").setVisible(true);
+                                        endingText2.setText("Your brutality will never be forgotten.").setVisible(true);
                                     }
                                 }
                             }
